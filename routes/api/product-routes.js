@@ -7,7 +7,6 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 router.get('/', (req, res) => {
   // find all products
   // be sure to include its associated Category and Tag data
-    // Get all books from the book table
     Product.findAll().then((productData) => {
       res.json(productData);
     });
@@ -39,8 +38,8 @@ router.post('/', (req, res) => {
       tagIds: [1, 2, 3, 4]
     }
   */
-    Category.create({
-      title: req.body.title,
+    Product.create({
+      category_name: req.body.category_name,
       author: req.body.author,
       is_paperback: true
     })

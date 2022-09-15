@@ -26,11 +26,11 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   Category.create({
-    id: req.params.id,
-    category_id: req.params.category_id,
+    id: req.body.id,
+    category_name: req.body.category_name,
   })
     .then((newCategory) => {
-      console.log('test');
+      //console.log('test');
       // Send the newly created row as a JSON object
       res.json(newCategory);
     })
@@ -39,82 +39,39 @@ router.post('/', (req, res) => {
     });
 });
 
-// router.put('/:id', (req, res) => {
-//   // update a category by its `id` value
-//   Product.update(req.body, {
-//     where: {
-//       id: req.params.id,
-//     },
-//   })
-//     .then((product) => {
-//       // find all associated tags from ProductTag
-//       return ProductTag.findAll({ where: { product_id: req.params.id } });
-//     })
-//     .then((productTags) => {
-//       // get list of current tag_ids
-//       const productTagIds = productTags.map(({ tag_id }) => tag_id);
-//       // create filtered list of new tag_ids
-//       const newProductTags = req.body.tagIds
-//         .filter((tag_id) => !productTagIds.includes(tag_id))
-//         .map((tag_id) => {
-//           return {
-//             product_id: req.params.id,
-//             tag_id,
-//           };
-//         });
-//       // figure out which ones to remove
-//       const productTagsToRemove = productTags
-//         .filter(({ tag_id }) => !req.body.tagIds.includes(tag_id))
-//         .map(({ id }) => id);
-
-//       // run both actions
-//       return Promise.all([
-//         ProductTag.destroy({ where: { id: productTagsToRemove } }),
-//         ProductTag.bulkCreate(newProductTags),
-//       ]);
-//     })
-//     .then((updatedProductTags) => res.json(updatedProductTags))
-//     .catch((err) => {
-//       // console.log(err);
-//       res.status(400).json(err);
-//     });
-// });
-
 router.delete('/:id', (req, res) => {
   // Looks for the Category based on id given in the request parameters and deletes the instance from the database
-  //console.log(req.params.id);
   Category.destroy({
     where: {
-      id: req.params.id
+      id: req.body.id,
     },
   })
-    .then((deletedBook) => {
-      res.json(deletedBook);
+  .then((deletedCat) => {
+     res.json(deletedCat);
+  })
+    .catch((err) => res.json(err));
+});
+
+
+// Calls the update method on the Category model
+router.put('/', (req, res) => {
+  Category.update(
+    {
+      // All the fields you can update and the data attached to the request body.
+      category_name: req.body.category_name,
+    },
+    {
+      // Gets the categories based on the id given in the request parameters
+      where: {
+        id: req.body.id,
+      },
+    }
+  )
+    .then((updatedCat) => {
+      // Sends the updated category as a json response
+      res.json(updatedCat);
     })
     .catch((err) => res.json(err));
 });
 
 module.exports = router;
-/*  // Calls the update method on the Book model
-  Book.update(
-    {
-      // All the fields you can update and the data attached to the request body.
-      title: req.body.title,
-      author: req.body.author,
-      isbn: req.body.isbn,
-      pages: req.body.pages,
-      edition: req.body.edition,
-      is_paperback: req.body.is_paperback,
-    },
-    {
-      // Gets the books based on the isbn given in the request parameters
-      where: {
-        isbn: req.params.isbn,
-      },
-    }
-  )
-    .then((updatedBook) => {
-      // Sends the updated book as a json response
-      res.json(updatedBook);
-    })
-    .catch((err) => res.json(err));*/
