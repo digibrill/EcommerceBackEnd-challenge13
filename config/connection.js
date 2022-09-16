@@ -11,8 +11,6 @@ const sequelize = process.env.JAWSDB_URL
         decimalNumbers: true,
       },
     });
-    DB_NAME='ecommerce_db'
-    DB_USER='root'
-    DB_PASSWORD='Mysqlz777@!'
+    
     
 module.exports = sequelize;

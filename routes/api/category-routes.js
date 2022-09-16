@@ -43,7 +43,7 @@ router.delete('/:id', (req, res) => {
   // Looks for the Category based on id given in the request parameters and deletes the instance from the database
   Category.destroy({
     where: {
-      id: req.body.id,
+      id: req.params.id,
     },
   })
   .then((deletedCat) => {

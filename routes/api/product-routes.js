@@ -38,18 +38,6 @@ router.post('/', (req, res) => {
       tagIds: [1, 2, 3, 4]
     }
   */
-    Product.create({
-      category_name: req.body.category_name,
-      author: req.body.author,
-      is_paperback: true
-    })
-      .then((newCategory) => {
-        // Send the newly created row as a JSON object
-        res.json(newCategory);
-      })
-      .catch((err) => {
-        res.json(err);
-      });
   Product.create(req.body)
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
@@ -73,11 +61,11 @@ router.post('/', (req, res) => {
 });
 
 // update product
-router.put('/:id', (req, res) => {
+router.put('/', (req, res) => {
   // update product data
   Product.update(req.body, {
     where: {
-      id: req.params.id,
+      id: req.body.id,
     },
   })
     .then((product) => {
@@ -115,10 +103,10 @@ router.put('/:id', (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
-  // Looks for the books based on isbn given in the request parameters and deletes the instance from the database
+  // Looks for the product based on id given in the request parameters and deletes the instance from the database
   Product.destroy({
     where: {
-      isbn: req.params.id,
+      id: req.params.id,
     },
   })
     .then((deletedProduct) => {
